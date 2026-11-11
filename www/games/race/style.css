@@ -1,0 +1,94 @@
+#game { background: #87c6e8; }
+
+#hud {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+#timer-wrap {
+  width: min(520px, 70%);
+  height: 10px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+#timer-bar {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent3), var(--accent));
+  transition: width 0.1s linear;
+}
+
+#badge {
+  position: absolute;
+  top: -2px;
+  right: 0;
+  font-size: 11px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), #ff9966);
+  padding: 5px 10px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  letter-spacing: 1px;
+}
+
+#results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: min(380px, 85vw);
+  margin: 6px 0 4px;
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.07);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  text-align: left;
+}
+
+.result-row .rank {
+  font-weight: 800;
+  width: 22px;
+  color: var(--accent3);
+}
+
+.result-row.winner {
+  background: linear-gradient(135deg, rgba(255,211,77,0.25), rgba(255,93,93,0.18));
+  border: 1px solid rgba(255,211,77,0.5);
+}
+
+.result-row .name { flex: 1; font-weight: 700; }
+.result-row .tagb {
+  font-size: 10px;
+  opacity: 0.7;
+  background: rgba(255,255,255,0.12);
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+.result-row .scr { font-weight: 700; color: var(--accent2); }
+
+#touch-zones {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+#touch-zones .zone {
+  flex: 1;
+  pointer-events: auto;
+}

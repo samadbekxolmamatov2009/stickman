@@ -1,0 +1,97 @@
+html, body { overflow-y: auto; height: auto; min-height: 100%; }
+
+#hub {
+  min-height: 100vh;
+  padding: 28px 18px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+header { text-align: center; margin-bottom: 22px; }
+
+header h1 {
+  font-size: clamp(30px, 7vw, 52px);
+  letter-spacing: 2px;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.3);
+}
+header h1 .dot { color: var(--accent); }
+
+header .tag {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  position: relative;
+  border-radius: 18px;
+  padding: 18px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.1);
+  text-decoration: none;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 170px;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  overflow: hidden;
+}
+
+.card:active { transform: scale(0.97); }
+
+.card.soon {
+  opacity: 0.55;
+  filter: grayscale(0.4);
+  cursor: default;
+}
+.card.soon:active { transform: none; }
+
+.soon-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: rgba(255,255,255,0.15);
+  padding: 4px 10px;
+  border-radius: 10px;
+  text-transform: uppercase;
+}
+
+.card .icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  background: var(--card-color, linear-gradient(135deg, #37d6c4, #2bb7a6));
+}
+
+.card h3 { font-size: 18px; }
+.card p { font-size: 13px; opacity: 0.75; line-height: 1.4; flex: 1; }
+
+.card .players {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffd34d;
+  background: rgba(255,255,255,0.08);
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+footer {
+  text-align: center;
+  opacity: 0.4;
+  font-size: 12px;
+  margin-top: 26px;
+}

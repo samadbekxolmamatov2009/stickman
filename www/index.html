@@ -4,59 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0b0f1a">
-<title>Stickman Race — Beta</title>
+<title>Stickman Games</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="shared/common.css">
+<link rel="stylesheet" href="hub.css">
 </head>
 <body>
-  <div id="game-wrap">
-    <canvas id="game" width="960" height="540"></canvas>
+  <div id="hub">
+    <header>
+      <h1>STICKMAN<span class="dot">.</span>GAMES</h1>
+      <p class="tag">9 ta mini-o'yin — bitta ilovada</p>
+    </header>
 
-    <div id="hud" class="hidden">
-      <div id="timer-wrap"><div id="timer-bar"></div></div>
-      <div id="badge">BETA v0.2</div>
-    </div>
+    <div class="grid" id="grid"></div>
 
-    <div id="start-screen" class="overlay">
-      <h1>STICKMAN<span class="dot">.</span>RACE</h1>
-      <p class="tag">beta v0.2 — multiplayer</p>
-
-      <div class="picker">
-        <span class="picker-label">Jami o'yinchilar</span>
-        <div class="seg" id="total-seg">
-          <button data-v="1">1</button>
-          <button data-v="2">2</button>
-          <button data-v="3">3</button>
-          <button data-v="4" class="active">4</button>
-        </div>
-      </div>
-
-      <div class="picker">
-        <span class="picker-label">Odam o'yinchilar (qolgani — bot)</span>
-        <div class="seg" id="human-seg">
-          <button data-v="0">0</button>
-          <button data-v="1" class="active">1</button>
-          <button data-v="2">2</button>
-          <button data-v="3">3</button>
-          <button data-v="4">4</button>
-        </div>
-      </div>
-
-      <p class="hint" id="keys-hint">P1: <b>SPACE</b> sakrash · <b>S</b> egilish</p>
-      <p class="hint mobile-only">O'z yo'lakchangizga bosing — sakrash, bosib turing — egilish</p>
-      <button id="start-btn">Poygani boshlash</button>
-      <p class="best-line">Eng yaxshi ball: <b id="best">0</b></p>
-    </div>
-
-    <div id="results-screen" class="overlay hidden">
-      <h2>Poyga tugadi!</h2>
-      <div id="results-list"></div>
-      <button id="retry-btn">Yana o'ynash</button>
-    </div>
-
-    <div id="touch-zones" class="hidden"></div>
+    <footer>made with canvas · beta</footer>
   </div>
 
-  <script src="script.js"></script>
+  <script src="hub.js"></script>
 </body>
 </html>
