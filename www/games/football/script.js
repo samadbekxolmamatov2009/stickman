@@ -5,7 +5,7 @@
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
-  const GOAL_H = 170;
+  const GOAL_H = 110;
   const GOAL_Y0 = H / 2 - GOAL_H / 2;
   const GOAL_Y1 = H / 2 + GOAL_H / 2;
   const ROUND_TIME = 60;
@@ -59,8 +59,8 @@
       }
       const sp = Math.hypot(this.vx, this.vy);
       if (sp > MAX_SPEED) { this.vx = (this.vx / sp) * MAX_SPEED; this.vy = (this.vy / sp) * MAX_SPEED; }
-      this.x = clamp(this.x + this.vx * dt, PLAYER_R + 4, W - PLAYER_R - 4);
-      this.y = clamp(this.y + this.vy * dt, PLAYER_R + 4, H - PLAYER_R - 4);
+      this.x = clamp(this.x + this.vx * dt, PLAYER_R + 12, W - PLAYER_R - 12);
+      this.y = clamp(this.y + this.vy * dt, PLAYER_R + 12, H - PLAYER_R - 12);
       if (this.shootCd > 0) this.shootCd -= dt;
     }
   }
@@ -113,13 +113,13 @@
   function kick(player, otherGoalX, strong) {
     const dx = ball.x - player.x, dy = ball.y - player.y;
     const d = Math.hypot(dx, dy) || 1;
-    const aimX = otherGoalX - player.x, aimY = (H / 2) - player.y;
-    const aimLen = Math.hypot(aimX, aimY) || 1;
-    const dirX = strong ? aimX / aimLen : dx / d;
-    const dirY = strong ? aimY / aimLen : dy / d;
-    const power = strong ? 560 : 200 + Math.hypot(player.vx, player.vy) * 0.6;
-    ball.vx = dirX * power + player.vx * 0.25;
-    ball.vy = dirY * power + player.vy * 0.25;
+    // a real shot fires in the direction the player is facing (skill-based aim),
+    // a passing touch just nudges the ball away from contact so it can't rocket in by accident
+    const dirX = strong ? Math.cos(player.angle) : dx / d;
+    const dirY = strong ? Math.sin(player.angle) : dy / d;
+    const power = strong ? 540 : 55 + Math.hypot(player.vx, player.vy) * 0.3;
+    ball.vx = dirX * power + player.vx * 0.2;
+    ball.vy = dirY * power + player.vy * 0.2;
     sfx(300, 0.08, 'triangle', 0.06);
   }
 
@@ -140,6 +140,8 @@
     const defend = ball.x > W * 0.55;
     if (dBall > 1) { p2.moveX = toBallX / dBall; p2.moveY = toBallY / dBall; }
     if (dBall < PLAYER_R + BALL_R + 14 && p2.shootCd <= 0 && Math.random() < 0.6) {
+      const gY = H / 2 + rand(-30, 30);
+      p2.angle = Math.atan2(gY - p2.y, 0 - p2.x) + rand(-0.08, 0.08);
       p2.wantsShoot = true;
     }
     if (!defend && Math.random() < 0.01) { p2.moveX *= 0.3; p2.moveY *= 0.3; }
@@ -172,12 +174,23 @@
     ball.vx -= ball.vx * 0.6 * dt;
     ball.vy -= ball.vy * 0.6 * dt;
 
-    if (ball.y < ball.r) { ball.y = ball.r; ball.vy *= -0.6; }
-    if (ball.y > H - ball.r) { ball.y = H - ball.r; ball.vy *= -0.6; }
+    const EDGE = 16;
+    if (ball.y < EDGE + ball.r) { ball.y = EDGE + ball.r; ball.vy *= -0.6; }
+    if (ball.y > H - EDGE - ball.r) { ball.y = H - EDGE - ball.r; ball.vy *= -0.6; }
 
-    if (ball.x < -ball.r - 2) { if (ball.y > GOAL_Y0 && ball.y < GOAL_Y1) goal(1); else { ball.x = ball.r; ball.vx *= -0.6; } }
-    else if (ball.x < ball.r && !(ball.y > GOAL_Y0 && ball.y < GOAL_Y1)) { ball.x = ball.r; ball.vx *= -0.6; }
-    if (ball.x > W + ball.r + 2) { if (ball.y > GOAL_Y0 && ball.y < GOAL_Y1) goal(0); else { ball.x = W - ball.r; ball.vx *= -0.6; } }
+    if (ball.x < -ball.r - 2) { if (ball.y > GOAL_Y0 && ball.y < GOAL_Y1) goal(1); else { ball.x = EDGE + ball.r; ball.vx *= -0.6; } }
+    else if (ball.x < EDGE + ball.r && !(ball.y > GOAL_Y0 && ball.y < GOAL_Y1)) { ball.x = EDGE + ball.r; ball.vx *= -0.6; }
+    if (ball.x > W + ball.r + 2) { if (ball.y > GOAL_Y0 && ball.y < GOAL_Y1) goal(0); else { ball.x = W - EDGE - ball.r; ball.vx *= -0.6; } }
+    else if (ball.x > W - EDGE - ball.r && !(ball.y > GOAL_Y0 && ball.y < GOAL_Y1)) { ball.x = W - EDGE - ball.r; ball.vx *= -0.6; }
+
+    // never let the ball permanently wedge into a dead corner pocket
+    const speed = Math.hypot(ball.vx, ball.vy);
+    const nearCornerX = ball.x < EDGE + ball.r + 30 || ball.x > W - EDGE - ball.r - 30;
+    const nearCornerY = ball.y < EDGE + ball.r + 30 || ball.y > H - EDGE - ball.r - 30;
+    if (speed < 20 && nearCornerX && nearCornerY) {
+      ball.vx += (W / 2 - ball.x) * 0.8 * dt * 10;
+      ball.vy += (H / 2 - ball.y) * 0.8 * dt * 10;
+    }
     else if (ball.x > W - ball.r && !(ball.y > GOAL_Y0 && ball.y < GOAL_Y1)) { ball.x = W - ball.r; ball.vx *= -0.6; }
 
     if (shake > 0) shake *= 0.85;

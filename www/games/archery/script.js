@@ -6,11 +6,11 @@
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   const GROUND_Y = H - 90;
-  const GRAVITY = 620;
+  const GRAVITY = 520;
   const WIND_ACCEL = 16;
-  const MAX_POWER = 620;
-  const CHARGE_RATE = 520;
-  const DEFAULT_PREVIEW_POWER = 360;
+  const MAX_POWER = 780;
+  const CHARGE_RATE = 560;
+  const DEFAULT_PREVIEW_POWER = 560;
 
   const hud = document.getElementById('hud');
   const score1El = document.getElementById('score1');
@@ -114,8 +114,8 @@
   function botAct(dt) {
     if (botTimer > 0) { botTimer -= dt; return; }
     const dist = Math.abs(P2X - P1X);
-    const estPower = clamp(260 + dist * 0.28, 260, 560) + rand(-40, 40);
-    const estAngle = clamp(0.55 + rand(-0.12, 0.12) - wind * dir(1) * 0.05, 0.25, 1.15);
+    const estPower = clamp(520 + dist * 0.32, 520, 740) + rand(-40, 40);
+    const estAngle = clamp(0.5 + rand(-0.1, 0.1) - wind * dir(1) * 0.04, 0.25, 1.1);
     angle[1] = estAngle;
     fire(estPower);
   }
