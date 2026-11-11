@@ -573,8 +573,8 @@
 
     playerBox() {
       const p = this.player;
-      if (p.ducking) return { x: PLAYER_X - 22 * this.scale, y: p.y - 40 * this.scale, w: 44 * this.scale, h: 40 * this.scale };
-      return { x: PLAYER_X - 15 * this.scale, y: p.y - p.height, w: 30 * this.scale, h: p.height };
+      if (p.ducking) return { x: PLAYER_X - 18 * this.scale, y: p.y - 36 * this.scale, w: 36 * this.scale, h: 36 * this.scale };
+      return { x: PLAYER_X - 11 * this.scale, y: p.y - p.height + 6 * this.scale, w: 22 * this.scale, h: p.height - 6 * this.scale };
     }
 
     spawnEntities(type, x, speed, withCoin, withPower) {
@@ -846,7 +846,7 @@
     update(dt) {
       if (this.state !== 'playing') return;
 
-      this.speed = Math.min(640, 320 + this.distance * 0.01);
+      this.speed = Math.min(520, 260 + this.distance * 0.0045);
       this.distance += this.speed * dt;
       this.elapsed += dt;
 
@@ -856,7 +856,7 @@
       this.spawnTimer -= dt;
       if (this.spawnTimer <= 0) {
         this.spawn();
-        this.spawnTimer = clamp(rand(0.85, 1.4) - this.distance * 0.00004, 0.5, 1.4);
+        this.spawnTimer = clamp(rand(1.05, 1.7) - this.distance * 0.00002, 0.75, 1.7);
       }
 
       for (const lane of this.lanes) {
@@ -867,7 +867,7 @@
       const pct = clamp(1 - this.elapsed / ROUND_TIME, 0, 1);
       timerBar.style.width = `${pct * 100}%`;
 
-      if (this.elapsed >= ROUND_TIME) this.endRound();
+      if (this.elapsed >= ROUND_TIME || this.lanes.every(l => !l.alive)) this.endRound();
     }
 
     draw() {

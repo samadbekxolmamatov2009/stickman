@@ -30,8 +30,11 @@
   });
 
   const MAX_HP = 100;
-  const ATTACK_RANGE = 56;
   const MOVE_SPEED = 220;
+  const MOVES = {
+    punch: { range: 54, dmg: 10, cd: 0.38, active: 0.1, startup: 0.04 },
+    kick: { range: 72, dmg: 16, cd: 0.62, active: 0.16, startup: 0.09 },
+  };
 
   class Fighter {
     constructor(x, color, facing) {
@@ -41,36 +44,51 @@
       this.phase = 0;
       this.attackCd = 0;
       this.attackActive = 0;
+      this.attackStartup = 0;
+      this.attackType = null;
       this.hitstun = 0;
       this.iframes = 0;
       this.vx = 0;
       this.moveDir = 0;
+      this.blocking = false;
+      this.weaponTime = 0;
       this.dead = false;
     }
     takeHit(dmg, fromX) {
       if (this.iframes > 0 || this.dead) return;
-      this.hp = Math.max(0, this.hp - dmg);
-      this.iframes = 0.35;
-      this.hitstun = 0.18;
+      const blocked = this.blocking;
+      const realDmg = blocked ? dmg * 0.25 : dmg;
+      this.hp = Math.max(0, this.hp - realDmg);
+      this.iframes = blocked ? 0.2 : 0.35;
+      this.hitstun = blocked ? 0.08 : 0.18;
       const dir = this.x > fromX ? 1 : -1;
-      this.vx = dir * 260;
-      this.vy = -220;
-      this.onGround = false;
+      this.vx = dir * (blocked ? 90 : 260);
+      this.vy = blocked ? 0 : -220;
+      if (!blocked) this.onGround = false;
       if (this.hp <= 0) this.dead = true;
+      return blocked;
     }
-    attack() {
-      if (this.attackCd > 0 || this.hitstun > 0 || this.dead) return;
-      this.attackCd = 0.5;
-      this.attackActive = 0.14;
-      sfx(300, 0.08, 'square', 0.07);
+    attack(type) {
+      if (this.attackCd > 0 || this.hitstun > 0 || this.dead || this.blocking) return;
+      const m = MOVES[type];
+      this.attackCd = m.cd;
+      this.attackStartup = m.startup;
+      this.attackActive = m.active;
+      this.attackType = type;
+      sfx(type === 'kick' ? 220 : 320, 0.08, 'square', 0.07);
     }
+    block(state) { this.blocking = state && this.onGround && this.hitstun <= 0; }
+    pickupWeapon() { this.weaponTime = 10; }
     update(dt, particles) {
       if (this.attackCd > 0) this.attackCd -= dt;
       if (this.iframes > 0) this.iframes -= dt;
       if (this.hitstun > 0) this.hitstun -= dt;
-      if (this.attackActive > 0) this.attackActive -= dt;
+      if (this.attackStartup > 0) this.attackStartup -= dt;
+      else if (this.attackActive > 0) this.attackActive -= dt;
+      if (this.weaponTime > 0) this.weaponTime -= dt;
 
-      if (this.hitstun <= 0 && !this.dead) {
+      const canMove = this.hitstun <= 0 && !this.dead && !this.blocking;
+      if (canMove) {
         this.x += this.moveDir * MOVE_SPEED * dt;
       } else {
         this.x += this.vx * dt;
@@ -84,32 +102,47 @@
         if (this.y >= GROUND_Y) { this.y = GROUND_Y; this.vy = 0; this.onGround = true; }
       }
 
-      if (this.moveDir !== 0 && this.onGround && this.hitstun <= 0) this.phase += dt * 9;
+      if (this.moveDir !== 0 && this.onGround && canMove) this.phase += dt * 9;
     }
-    jump() { if (this.onGround && this.hitstun <= 0) { this.vy = -520; this.onGround = false; sfx(420, 0.1, 'triangle', 0.06); } }
+    jump() { if (this.onGround && this.hitstun <= 0 && !this.blocking) { this.vy = -520; this.onGround = false; sfx(420, 0.1, 'triangle', 0.06); } }
+    get isActive() { return this.attackStartup <= 0 && this.attackActive > 0; }
     draw(ctx, label) {
       const legPhase = this.moveDir !== 0 && this.onGround ? Math.sin(this.phase) : 0;
+      const attacking = this.attackStartup > 0 || this.attackActive > 0;
       drawSideStick(ctx, this.x, this.y, {
         color: this.color, scale: 1, height: 96,
-        legPhase, legPhaseB: legPhase + Math.PI,
-        armPhase: this.attackActive > 0 ? -1.6 * this.facing : Math.sin(this.phase + Math.PI),
-        armPhaseB: this.attackActive > 0 ? 1.6 * this.facing : Math.sin(this.phase),
+        legPhase: this.blocking ? 0 : legPhase, legPhaseB: this.blocking ? 0 : legPhase + Math.PI,
+        armPhase: attacking ? -1.6 * this.facing : (this.blocking ? -0.3 : Math.sin(this.phase + Math.PI)),
+        armPhaseB: attacking ? 1.6 * this.facing : (this.blocking ? 0.3 : Math.sin(this.phase)),
+        duck: this.blocking ? 0.18 : 0,
         dead: this.dead, label,
+        weapon: this.weaponTime > 0 ? 'sword' : null,
       });
+      if (this.blocking) {
+        ctx.save();
+        ctx.globalAlpha = 0.5;
+        ctx.strokeStyle = '#cfd6e6';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y - 55, 30, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
     }
   }
 
-  let p1, p2, particles, roundWins, roundNum, state = 'start', shake = 0;
+  let p1, p2, particles, roundWins, bat, batTimer, state = 'start', shake = 0;
 
   function resetRound() {
     p1 = new Fighter(W * 0.3, '#ff5d5d', 1);
     p2 = new Fighter(W * 0.7, '#4da3ff', -1);
     particles = new Particles();
+    bat = null;
+    batTimer = rand(4, 7);
   }
 
   function startMatch() {
     roundWins = [0, 0];
-    roundNum = 1;
     resetRound();
     state = 'playing';
     startScreen.classList.add('hidden');
@@ -145,24 +178,71 @@
     }
   }
 
+  let botBlockTimer = 0;
   function aiThink(dt) {
     const dist = p1.x - p2.x;
     const absDist = Math.abs(dist);
+
+    if (botBlockTimer > 0) {
+      botBlockTimer -= dt;
+      p2.block(true);
+      p2.moveDir = 0;
+      return;
+    }
+    p2.block(false);
+
+    if (p1.isActive && absDist < 90 && Math.random() < 0.045) { botBlockTimer = 0.35; return; }
+
     p2.moveDir = 0;
-    if (absDist > ATTACK_RANGE + 10) p2.moveDir = dist > 0 ? 1 : -1;
-    else if (Math.random() < 0.02) p2.jump();
-    if (absDist < ATTACK_RANGE && p2.attackCd <= 0 && Math.random() < 0.035) p2.attack();
+    const kickRange = MOVES.kick.range, punchRange = MOVES.punch.range;
+    if (absDist > kickRange - 6) p2.moveDir = dist > 0 ? 1 : -1;
+    else if (Math.random() < 0.015) p2.jump();
+
+    if (p2.attackCd <= 0) {
+      if (absDist < punchRange && Math.random() < 0.03) p2.attack('punch');
+      else if (absDist < kickRange && absDist > punchRange - 10 && Math.random() < 0.03) p2.attack('kick');
+    }
+    if (bat && Math.abs(bat.x - p2.x) < 90 && !bat.taken) p2.moveDir = bat.x > p2.x ? 1 : -1;
   }
 
   function checkHit(attacker, defender) {
-    if (attacker.attackActive > 0 && attacker.attackActive > 0.08) {
-      const reach = attacker.x + attacker.facing * ATTACK_RANGE;
-      if (Math.abs(reach - defender.x) < 34 && Math.abs(attacker.x - defender.x) < ATTACK_RANGE + 20) {
-        defender.takeHit(12, attacker.x);
+    if (attacker.isActive) {
+      const m = MOVES[attacker.attackType];
+      const reach = attacker.x + attacker.facing * m.range;
+      if (Math.abs(reach - defender.x) < 34 && Math.abs(attacker.x - defender.x) < m.range + 20) {
+        const dmg = attacker.attackType === 'punch' && attacker.weaponTime > 0 ? m.dmg + 10 : m.dmg;
+        const blocked = defender.takeHit(dmg, attacker.x);
         attacker.attackActive = 0;
-        particles.emit(defender.x, defender.y - 60, 10, { color: '255,200,120' });
-        sfx(150, 0.12, 'sawtooth', 0.1);
-        shake = 6;
+        if (blocked) {
+          particles.emit(defender.x, defender.y - 60, 6, { color: '200,210,230' });
+          sfx(500, 0.06, 'square', 0.05);
+        } else {
+          particles.emit(defender.x, defender.y - 60, 10, { color: '255,200,120' });
+          sfx(150, 0.12, 'sawtooth', 0.1);
+          shake = 6;
+        }
+      }
+    }
+  }
+
+  function updateBat(dt) {
+    if (bat) {
+      if (!bat.taken) {
+        [p1, p2].forEach(f => {
+          if (!bat.taken && f.onGround && Math.abs(f.x - bat.x) < 26) {
+            bat.taken = true;
+            f.pickupWeapon();
+            particles.emit(bat.x, GROUND_Y - 20, 12, { color: '255,220,120' });
+            sfx(700, 0.15, 'triangle', 0.08);
+          }
+        });
+      }
+      if (bat.taken) bat = null;
+    } else {
+      batTimer -= dt;
+      if (batTimer <= 0) {
+        bat = { x: rand(W * 0.35, W * 0.65), taken: false };
+        batTimer = rand(7, 10);
       }
     }
   }
@@ -173,8 +253,8 @@
     p1.update(dt, particles);
     p2.update(dt, particles);
     particles.update(dt);
+    updateBat(dt);
 
-    // always face each other; keep a minimum separation so attacks can't whiff by passing through
     p1.facing = p2.x >= p1.x ? 1 : -1;
     p2.facing = p1.x >= p2.x ? 1 : -1;
     const minSep = 46;
@@ -209,6 +289,17 @@
     ctx.fillStyle = 'rgba(255,255,255,0.15)';
     ctx.fillRect(0, GROUND_Y, W, 3);
 
+    if (bat && !bat.taken) {
+      ctx.save();
+      ctx.translate(bat.x, GROUND_Y - 14);
+      ctx.rotate(-0.5);
+      ctx.strokeStyle = '#8a6a3d';
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(-12, 0); ctx.lineTo(12, 0); ctx.stroke();
+      ctx.restore();
+    }
+
     if (p1 && p2) {
       p1.draw(ctx, 'P1');
       p2.draw(ctx, mode === 'bot' ? 'BOT' : 'P2');
@@ -234,19 +325,23 @@
     if (state === 'start' && e.code === 'Space') startMatch();
     if (state !== 'playing') return;
     if (e.code === 'KeyW') p1.jump();
-    if (e.code === 'KeyF') p1.attack();
+    if (e.code === 'KeyF') p1.attack('punch');
+    if (e.code === 'KeyG') p1.attack('kick');
     if (mode === 'human') {
       if (e.code === 'ArrowUp') p2.jump();
-      if (e.code === 'KeyL') p2.attack();
+      if (e.code === 'KeyL') p2.attack('punch');
+      if (e.code === 'KeyK') p2.attack('kick');
     }
   });
   window.addEventListener('keyup', e => keys.delete(e.code));
 
   function applyHeldKeys() {
     if (state !== 'playing') return;
-    p1.moveDir = (keys.has('KeyD') ? 1 : 0) - (keys.has('KeyA') ? 1 : 0);
+    p1.block(keys.has('KeyS'));
+    p1.moveDir = p1.blocking ? 0 : (keys.has('KeyD') ? 1 : 0) - (keys.has('KeyA') ? 1 : 0);
     if (mode === 'human') {
-      p2.moveDir = (keys.has('ArrowRight') ? 1 : 0) - (keys.has('ArrowLeft') ? 1 : 0);
+      p2.block(keys.has('ArrowDown'));
+      p2.moveDir = p2.blocking ? 0 : (keys.has('ArrowRight') ? 1 : 0) - (keys.has('ArrowLeft') ? 1 : 0);
     }
   }
   setInterval(applyHeldKeys, 16);
@@ -260,7 +355,9 @@
   bindHold(document.getElementById('tc-left'), () => { if (p1) p1.moveDir = -1; }, () => { if (p1 && p1.moveDir === -1) p1.moveDir = 0; });
   bindHold(document.getElementById('tc-right'), () => { if (p1) p1.moveDir = 1; }, () => { if (p1 && p1.moveDir === 1) p1.moveDir = 0; });
   bindHold(document.getElementById('tc-jump'), () => { if (p1) p1.jump(); });
-  bindHold(document.getElementById('tc-atk'), () => { if (p1) p1.attack(); });
+  bindHold(document.getElementById('tc-atk'), () => { if (p1) p1.attack('punch'); });
+  bindHold(document.getElementById('tc-kick'), () => { if (p1) p1.attack('kick'); }, () => {});
+  bindHold(document.getElementById('tc-block'), () => { if (p1) p1.block(true); }, () => { if (p1) p1.block(false); });
 
   startBtn.addEventListener('click', startMatch);
   retryBtn.addEventListener('click', startMatch);

@@ -7,9 +7,10 @@
   const W = canvas.width, H = canvas.height;
   const GROUND_Y = H - 90;
   const GRAVITY = 620;
-  const WIND_ACCEL = 34;
+  const WIND_ACCEL = 16;
   const MAX_POWER = 620;
   const CHARGE_RATE = 520;
+  const DEFAULT_PREVIEW_POWER = 360;
 
   const hud = document.getElementById('hud');
   const score1El = document.getElementById('score1');
@@ -46,11 +47,12 @@
   let scores = [0, 0];
   let botTimer = 0;
   let turnEndTimer = 0;
+  let hitFlash = null;
 
   function archerX(i) { return i === 0 ? P1X : P2X; }
   function dir(i) { return i === 0 ? 1 : -1; }
 
-  function newWind() { wind = rand(-1, 1) * rand(0.3, 1); }
+  function newWind() { wind = rand(-1, 1) * rand(0.15, 0.55); }
 
   function startMatch() {
     scores = [0, 0];
@@ -136,12 +138,17 @@
 
       const targetIdx = 1 - turn;
       const tx = archerX(targetIdx);
-      const ty = GROUND_Y - 46;
-      if (Stk.circleHit(arrow.x, arrow.y, 5, tx, ty, 24)) {
-        scores[turn]++;
+      const headY = GROUND_Y - 84;
+      const bodyY = GROUND_Y - 44;
+      const headHit = Stk.circleHit(arrow.x, arrow.y, 5, tx, headY, 15);
+      const bodyHit = !headHit && Stk.circleHit(arrow.x, arrow.y, 5, tx, bodyY, 30);
+      if (headHit || bodyHit) {
+        const pts = headHit ? 2 : 1;
+        scores[turn] += pts;
         updateHud();
-        particles.emit(arrow.x, arrow.y, 16, { color: '255,120,100', vxMin: -140, vxMax: 140, vyMin: -160, vyMax: 20 });
-        sfx(180, 0.25, 'sawtooth', 0.12);
+        hitFlash = { text: headHit ? "BOSH! +2" : '+1', x: tx, y: headHit ? headY : bodyY, t: 1 };
+        particles.emit(arrow.x, arrow.y, headHit ? 22 : 14, { color: headHit ? '255,210,80' : '255,120,100', vxMin: -140, vxMax: 140, vyMin: -160, vyMax: 20 });
+        sfx(headHit ? 260 : 180, 0.25, 'sawtooth', 0.12);
         arrow = null;
         if (!checkMatchOver()) { turn = 1 - turn; newWind(); endTurn(true); }
         else state = 'results';
@@ -161,6 +168,21 @@
       }
     }
     if (particles) particles.update(dt);
+    if (hitFlash) { hitFlash.t -= dt * 0.6; if (hitFlash.t <= 0) hitFlash = null; }
+  }
+
+  function computeTrajectory(a, p, d) {
+    const pts = [];
+    let x = archerX(turn) + d * 20, y = GROUND_Y - 60;
+    let vx = Math.cos(a) * p * d, vy = -Math.sin(a) * p;
+    for (let i = 0; i < 70; i++) {
+      vy += GRAVITY * 0.03;
+      x += vx * 0.03;
+      y += vy * 0.03;
+      if (i % 2 === 0) pts.push({ x, y });
+      if (y >= GROUND_Y || x < 0 || x > W) break;
+    }
+    return pts;
   }
 
   function drawField() {
@@ -196,6 +218,15 @@
 
     if (state === 'aiming' || state === 'turnend') drawAimLine(turn);
 
+    if (state === 'aiming' && canAct()) {
+      const previewPower = charging ? Math.max(power, 160) : DEFAULT_PREVIEW_POWER;
+      const pts = computeTrajectory(angle[turn], previewPower, dir(turn));
+      ctx.save();
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      pts.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2); ctx.fill(); });
+      ctx.restore();
+    }
+
     drawSideStick(ctx, P1X, GROUND_Y, { color: '#ff5d5d', scale: 1, height: 90, legPhase: 0.3, legPhaseB: -0.3, armPhase: -0.4, armPhaseB: 0.6, weapon: 'bow', label: 'P1' });
     ctx.save(); ctx.scale(-1, 1);
     drawSideStick(ctx, -P2X, GROUND_Y, { color: '#4da3ff', scale: 1, height: 90, legPhase: 0.3, legPhaseB: -0.3, armPhase: -0.4, armPhaseB: 0.6, weapon: 'bow' });
@@ -228,6 +259,16 @@
     }
 
     particles.draw(ctx);
+
+    if (hitFlash) {
+      ctx.save();
+      ctx.globalAlpha = clamp(hitFlash.t, 0, 1);
+      ctx.font = 'bold 22px Trebuchet MS, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ffd34d';
+      ctx.fillText(hitFlash.text, hitFlash.x, hitFlash.y - 20 - (1 - hitFlash.t) * 30);
+      ctx.restore();
+    }
   }
 
   let last = performance.now();

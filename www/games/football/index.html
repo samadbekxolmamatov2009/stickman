@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b0f1a">
+<title>Stickman Futbol — Stickman Games</title>
+<link rel="stylesheet" href="../../shared/common.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-wrap">
+    <a class="back-link" href="../../index.html">← Menyu</a>
+    <canvas id="game" width="960" height="540"></canvas>
+
+    <div id="hud" class="hidden">
+      <div class="score-chip p1">P1 <b id="score1">0</b></div>
+      <div id="timer-wrap"><div id="timer-bar"></div></div>
+      <div class="score-chip p2"><b id="score2">0</b> <span id="p2name">BOT</span></div>
+    </div>
+
+    <div id="start-screen" class="overlay">
+      <h1>STICKMAN<span class="dot">.</span>FUTBOL</h1>
+      <p class="tag">3 golgacha yoki 60 soniya</p>
+      <div class="picker">
+        <span class="picker-label">Raqib</span>
+        <div class="seg" id="mode-seg">
+          <button data-v="bot" class="active">Bot</button>
+          <button data-v="human">2-o'yinchi</button>
+        </div>
+      </div>
+      <p class="hint">P1: <b>WASD</b> yurish · <b>F</b> zarba</p>
+      <p class="hint" id="p2-hint">P2: <b>←↑↓→</b> yurish · <b>L</b> zarba</p>
+      <p class="hint mobile-only">Chapdagi doiradan yurish, o'ngdagi tugma bilan zarba</p>
+      <button id="start-btn">O'yinni boshlash</button>
+    </div>
+
+    <div id="results-screen" class="overlay hidden">
+      <h2 id="winner-text">G'olib!</h2>
+      <button id="retry-btn">Yana o'ynash</button>
+    </div>
+
+    <div id="touch-controls" class="hidden">
+      <div id="tc-stick"><div id="tc-knob"></div></div>
+      <button id="tc-shoot" class="tc-btn">⚽</button>
+    </div>
+  </div>
+
+  <script src="../../shared/common.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
