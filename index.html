@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Stickman Runner — Beta</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-wrap">
+    <canvas id="game" width="960" height="540"></canvas>
+
+    <div id="hud">
+      <div id="score">0</div>
+      <div id="best">Best: 0</div>
+      <div id="badge">BETA v0.1</div>
+    </div>
+
+    <div id="start-screen" class="overlay">
+      <h1>STICKMAN<span class="dot">.</span>RUN</h1>
+      <p class="tag">beta v0.1</p>
+      <p class="hint">Sakrash: <b>SPACE / ↑</b> &nbsp;·&nbsp; Pastga egilish: <b>↓</b></p>
+      <p class="hint mobile-only">Ekranga bosing: sakrash</p>
+      <button id="start-btn">Boshlash</button>
+    </div>
+
+    <div id="gameover-screen" class="overlay hidden">
+      <h2>Yiqildi!</h2>
+      <p id="final-score">Ball: 0</p>
+      <button id="retry-btn">Qayta urinish</button>
+    </div>
+
+    <div id="touch-controls" class="mobile-only">
+      <button id="touch-jump">⤊</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
