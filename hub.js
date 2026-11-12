@@ -9,6 +9,8 @@
     { id: 'stickhero', title: 'Ko\'prik qahramoni', icon: '🌉', color: 'linear-gradient(135deg,#c77dff,#7a3fc2)', players: '1 o\'yinchi', desc: 'Ko\'prik tashla, teskari o\'tib olmos yig\'.', ready: true },
     { id: 'ninja', title: 'Ninja kesish', icon: '🥷', color: 'linear-gradient(135deg,#ff8a5d,#c2452e)', players: '1 o\'yinchi', desc: 'Mevalarni kes, kombo yig\', bombaga tegma.', ready: true },
     { id: 'battleroyale', title: 'Battle Royale', icon: '💀', color: 'linear-gradient(135deg,#b06cff,#6a2fc2)', players: '1 o\'yinchi + 7 bot', desc: 'Qurol top, zonada qol, oxirgi omon qolgan yutadi.', ready: true },
+    { id: 'rope', title: 'Arqonda uchish', icon: '🪢', color: 'linear-gradient(135deg,#7df9ff,#2a8fb0)', players: '1 o\'yinchi', desc: 'Arqon ot, tebran, to\'g\'ri paytda qo\'yib yubor.', ready: true },
+    { id: 'tower', title: 'Parkur minorasi', icon: '🌋', color: 'linear-gradient(135deg,#ff9a3d,#c2301f)', players: '1 o\'yinchi', desc: 'Tepaga sakrab chiq — pastdan lava ko\'tariladi.', ready: true },
   ];
   const grid = document.getElementById('grid');
   GAMES.forEach(g => {
