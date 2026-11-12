@@ -3,62 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0b0f1a">
-<title>Stickman Race — Beta</title>
-<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#070a14">
+<title>Stickman Race — Stickman Games</title>
 <link rel="stylesheet" href="../../shared/common.css">
-<link rel="stylesheet" href="style.css">
+<style>
+#rank-list { display: flex; flex-direction: column; gap: 6px; min-width: min(360px, 80vw); }
+.rank-row { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); padding: 8px 14px; border-radius: 12px; font-weight: 800; font-size: 15px; }
+.rank-row.first { background: linear-gradient(135deg, rgba(255,211,77,0.3), rgba(255,93,93,0.18)); border: 1px solid rgba(255,211,77,0.55); }
+.rank-row .pl { color: #ffd34d; width: 26px; text-align: left; }
+.rank-row .nm { flex: 1; text-align: left; }
+.rank-row .tm { color: #37d6c4; }
+</style>
 </head>
 <body>
   <div id="game-wrap">
-    <a class="back-link" href="../../index.html">← Menyu</a>
-    <canvas id="game" width="960" height="540"></canvas>
-
-    <div id="hud" class="hidden">
-      <div id="timer-wrap"><div id="timer-bar"></div></div>
-      <div id="badge">BETA v0.2</div>
-    </div>
+    <a class="back-link" href="../../index.html">‹</a>
+    <canvas id="game"></canvas>
 
     <div id="start-screen" class="overlay">
       <h1>STICKMAN<span class="dot">.</span>RACE</h1>
-      <p class="tag">beta v0.2 — multiplayer</p>
-
-      <div class="picker">
-        <span class="picker-label">Jami o'yinchilar</span>
-        <div class="seg" id="total-seg">
-          <button data-v="1">1</button>
-          <button data-v="2">2</button>
-          <button data-v="3">3</button>
-          <button data-v="4" class="active">4</button>
+      <p class="tag">marragacha poyga · turbo · to'siqlar</p>
+      <div class="picker-row">
+        <div class="picker">
+          <span class="picker-label">Poygachilar</span>
+          <div class="seg" id="total-seg">
+            <button data-v="2">2</button>
+            <button data-v="3">3</button>
+            <button data-v="4" class="active">4</button>
+          </div>
+        </div>
+        <div class="picker">
+          <span class="picker-label">Odamlar (qolgani bot)</span>
+          <div class="seg" id="human-seg">
+            <button data-v="1" class="active">1</button>
+            <button data-v="2">2</button>
+            <button data-v="3">3</button>
+            <button data-v="4">4</button>
+          </div>
+        </div>
+        <div class="picker" id="diff-pick">
+          <span class="picker-label">Botlar</span>
+          <div class="seg" id="diff-seg">
+            <button data-v="0">Oson</button>
+            <button data-v="1" class="active">O'rta</button>
+            <button data-v="2">Qiyin</button>
+          </div>
         </div>
       </div>
-
-      <div class="picker">
-        <span class="picker-label">Odam o'yinchilar (qolgani — bot)</span>
-        <div class="seg" id="human-seg">
-          <button data-v="0">0</button>
-          <button data-v="1" class="active">1</button>
-          <button data-v="2">2</button>
-          <button data-v="3">3</button>
-          <button data-v="4">4</button>
-        </div>
-      </div>
-
-      <p class="hint" id="keys-hint">P1: <b>SPACE</b> sakrash · <b>S</b> egilish</p>
-      <p class="hint mobile-only">O'z yo'lakchangizga bosing — sakrash, bosib turing — egilish</p>
+      <p class="hint desktop-only">Sakrash / sirpanish / turbo — P1: <b>W S D</b> · P2: <b>↑ ↓ →</b> · P3: <b>I K L</b> · P4: <b>T G H</b><br>To'siqdan sakrang, past to'sin ostidan sirpaning, tangalar yig'ib TURBO oling!</p>
+      <p class="hint mobile-only">Bosish — sakrash · pastga surish — sirpanish · tepaga surish — TURBO. Bir nechta odam bo'lsa, har kim ekranning o'z ustunida o'ynaydi.</p>
       <button id="start-btn">Poygani boshlash</button>
-      <p class="best-line">Eng yaxshi ball: <b id="best">0</b></p>
     </div>
 
     <div id="results-screen" class="overlay hidden">
-      <h2>Poyga tugadi!</h2>
-      <div id="results-list"></div>
-      <button id="retry-btn">Yana o'ynash</button>
+      <h2 id="winner-text">G'olib!</h2>
+      <div id="rank-list"></div>
+      <div class="btn-row">
+        <button id="retry-btn">Yana o'ynash</button>
+        <a class="secondary-link" href="../../index.html">Menyu</a>
+      </div>
     </div>
-
-    <div id="touch-zones" class="hidden"></div>
   </div>
 
+  <script src="../../shared/engine.js"></script>
+  <script src="../../shared/char.js"></script>
+  <script src="../../shared/scenery.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
