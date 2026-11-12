@@ -1,7 +1,7 @@
 {
   "name": "Stickman Games",
   "short_name": "StickmanGames",
-  "description": "6 ta stickman o'yinidan iborat to'plam.",
+  "description": "8 ta stickman o'yinidan iborat to'plam.",
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "landscape",

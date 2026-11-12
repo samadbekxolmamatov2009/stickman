@@ -7,8 +7,8 @@
     { id: 'archery', title: 'O\'q-yoy dueli', icon: '🏹', color: 'linear-gradient(135deg,#ffb84d,#d9791f)', players: '1-2 o\'yinchi', desc: 'Minoradan nishonga ol: shamol, tepalik, bonuslar.', ready: true },
     { id: 'towerdefense', title: 'Minora mudofaasi', icon: '🛡️', color: 'linear-gradient(135deg,#5aa9ff,#2a62c9)', players: '1 o\'yinchi', desc: '4 xil himoyachi, yangilash, 10 to\'lqin va boss.', ready: true },
     { id: 'stickhero', title: 'Ko\'prik qahramoni', icon: '🌉', color: 'linear-gradient(135deg,#c77dff,#7a3fc2)', players: '1 o\'yinchi', desc: 'Ko\'prik tashla, teskari o\'tib olmos yig\'.', ready: true },
-    { id: 'ninja', title: 'Ninja kesish', icon: '🥷', color: 'linear-gradient(135deg,#8a94a8,#4a5266)', players: '1 o\'yinchi', desc: 'Uchayotgan nishonlarni kes.' },
-    { id: 'battleroyale', title: 'Battle Royale', icon: '💀', color: 'linear-gradient(135deg,#8a94a8,#4a5266)', players: '2-4 o\'yinchi', desc: 'Torayuvchi maydonda oxirgi omon qolgan yutadi.' },
+    { id: 'ninja', title: 'Ninja kesish', icon: '🥷', color: 'linear-gradient(135deg,#ff8a5d,#c2452e)', players: '1 o\'yinchi', desc: 'Mevalarni kes, kombo yig\', bombaga tegma.', ready: true },
+    { id: 'battleroyale', title: 'Battle Royale', icon: '💀', color: 'linear-gradient(135deg,#b06cff,#6a2fc2)', players: '1 o\'yinchi + 7 bot', desc: 'Qurol top, zonada qol, oxirgi omon qolgan yutadi.', ready: true },
   ];
   const grid = document.getElementById('grid');
   GAMES.forEach(g => {
