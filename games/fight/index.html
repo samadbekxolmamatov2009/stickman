@@ -3,59 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0b0f1a">
+<meta name="theme-color" content="#070a14">
 <title>Arena Fight — Stickman Games</title>
 <link rel="stylesheet" href="../../shared/common.css">
-<link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="game-wrap">
-    <a class="back-link" href="../../index.html">← Menyu</a>
-    <canvas id="game" width="960" height="540"></canvas>
-
-    <div id="hud" class="hidden">
-      <div class="bar-wrap p1"><div class="name">P1</div><div class="bar"><div id="hp1" class="fill"></div></div></div>
-      <div id="rounds"></div>
-      <div class="bar-wrap p2"><div class="name" id="p2name">BOT</div><div class="bar"><div id="hp2" class="fill"></div></div></div>
-    </div>
+    <a class="back-link" href="../../index.html">‹</a>
+    <canvas id="game"></canvas>
 
     <div id="start-screen" class="overlay">
       <h1>ARENA<span class="dot">.</span>FIGHT</h1>
-      <p class="tag">3 raundli musht-tepki duel</p>
-      <div class="picker">
-        <span class="picker-label">Raqib</span>
-        <div class="seg" id="mode-seg">
-          <button data-v="bot" class="active">Bot</button>
-          <button data-v="human">2-o'yinchi</button>
+      <p class="tag">kombo · blok · qurol · maxsus zarba</p>
+      <div class="picker-row">
+        <div class="picker">
+          <span class="picker-label">Raqib</span>
+          <div class="seg" id="mode-seg">
+            <button data-v="bot" class="active">Bot</button>
+            <button data-v="human">2 o'yinchi</button>
+          </div>
+        </div>
+        <div class="picker" id="diff-pick">
+          <span class="picker-label">Qiyinlik</span>
+          <div class="seg" id="diff-seg">
+            <button data-v="0">Oson</button>
+            <button data-v="1" class="active">O'rta</button>
+            <button data-v="2">Qiyin</button>
+          </div>
         </div>
       </div>
-      <p class="hint">P1: <b>A/D</b> yurish · <b>W</b> sakrash · <b>F</b> musht · <b>G</b> tepki · <b>S</b> blok</p>
-      <p class="hint" id="p2-hint">P2: <b>←/→</b> yurish · <b>↑</b> sakrash · <b>L</b> musht · <b>K</b> tepki · <b>↓</b> blok</p>
-      <p class="hint">Maydonda paydo bo'ladigan <b>qilich</b>ni oling — musht kuchi oshadi!</p>
-      <p class="hint mobile-only">Chapda yurish, o'ngda zarba/blok tugmalari</p>
+      <p class="hint desktop-only">P1: <b>A/D</b> yurish · <b>W</b> sakrash · <b>S</b> blok · <b>F</b> musht (3x kombo) · <b>G</b> tepki · <b>H</b> maxsus · <b>Q</b> siltanish<br>
+      P2: <b>←/→</b> · <b>↑</b> · <b>↓</b> blok · <b>K</b> musht · <b>L</b> tepki · <b>;</b> maxsus · <b>O</b> siltanish</p>
+      <p class="hint mobile-only">Chapda joystik (tepaga — sakrash, pastga — blok), o'ngda zarba tugmalari. 3 ta musht ketma-ket = kombo. Energiya to'lsa — 🔥 olovli zarba!</p>
       <button id="start-btn">Jangni boshlash</button>
     </div>
 
     <div id="results-screen" class="overlay hidden">
       <h2 id="winner-text">G'olib!</h2>
-      <button id="retry-btn">Yana o'ynash</button>
-    </div>
-
-    <div id="touch-controls" class="hidden">
-      <div class="tc-left">
-        <button id="tc-left" class="tc-btn">◀</button>
-        <button id="tc-right" class="tc-btn">▶</button>
-      </div>
-      <div class="tc-right">
-        <button id="tc-jump" class="tc-btn">⤊</button>
-        <button id="tc-block" class="tc-btn block">🛡️</button>
-        <button id="tc-kick" class="tc-btn kick">🦵</button>
-        <button id="tc-atk" class="tc-btn atk">👊</button>
+      <div class="btn-row">
+        <button id="retry-btn">Yana o'ynash</button>
+        <a class="secondary-link" href="../../index.html">Menyu</a>
       </div>
     </div>
   </div>
 
-  <script src="../../shared/common.js"></script>
+  <script src="../../shared/engine.js"></script>
+  <script src="../../shared/char.js"></script>
+  <script src="../../shared/scenery.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
