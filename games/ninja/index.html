@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070a14">
+<title>Ninja kesish — Stickman Games</title>
+<link rel="stylesheet" href="../../shared/common.css">
+</head>
+<body>
+  <div id="game-wrap">
+    <a class="back-link" href="../../index.html">‹</a>
+    <canvas id="game"></canvas>
+
+    <div id="start-screen" class="overlay">
+      <h1>NINJA<span class="dot">.</span>KESISH</h1>
+      <p class="tag">kes · kombo yig' · bombaga tegma</p>
+      <div class="picker-row"><div class="picker"><span class="picker-label">Rejim</span>
+        <div class="seg" id="mode-seg"><button data-v="classic" class="active">Klassik (3 jon)</button><button data-v="arcade">Arkada (60 soniya)</button></div></div></div>
+      <p class="hint">Barmoq (yoki sichqoncha) bilan mevalarni <b>kesib o'ting</b>. Bir harakatda 3+ meva — <b>KOMBO</b>. ⭐ oltin meva — ko'p ball, ❄ muz — vaqt sekinlashadi. 💣 bombaga tegmang!</p>
+      <button id="start-btn">Boshlash</button>
+      <p class="best-line">Eng yaxshi natija: <b id="best">0</b></p><button class="hidden"></button>
+    </div>
+
+    <div id="results-screen" class="overlay hidden">
+      <h2 id="winner-text">Tamom!</h2>
+      <p class="big-score" id="final-score"></p>
+      <div class="btn-row">
+        <button id="retry-btn">Yana o'ynash</button>
+        <a class="secondary-link" href="../../index.html">Menyu</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/engine.js"></script>
+  <script src="../../shared/char.js"></script>
+  <script src="../../shared/scenery.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
