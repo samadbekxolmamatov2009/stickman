@@ -1,14 +1,16 @@
 {
-  "name": "stickman-race",
-  "version": "0.2.0",
+  "name": "stickman-games",
+  "version": "1.0.0",
   "private": true,
-  "description": "Stickman Race - local multiplayer stickman runner",
+  "description": "Stickman Games - a collection of stickman mini-games",
   "scripts": {
-    "sync": "cap sync android"
+    "www": "rm -rf www && mkdir -p www && cp index.html hub.js manifest.webmanifest www/ && cp -r shared games www/",
+    "sync": "npm run www && cap sync android",
+    "apk": "npm run sync && cd android && gradle assembleDebug"
   },
   "dependencies": {
-    "@capacitor/android": "^6.2.3",
-    "@capacitor/cli": "^6.2.3",
-    "@capacitor/core": "^6.2.3"
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/cli": "^6.2.1",
+    "@capacitor/core": "^6.2.1"
   }
 }
