@@ -3,41 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0b0f1a">
+<meta name="theme-color" content="#070a14">
 <title>Minora mudofaasi — Stickman Games</title>
 <link rel="stylesheet" href="../../shared/common.css">
-<link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="game-wrap">
-    <a class="back-link" href="../../index.html">← Menyu</a>
-    <canvas id="game" width="960" height="540"></canvas>
-
-    <div id="hud" class="hidden">
-      <div class="chip gold">💰 <b id="gold">80</b></div>
-      <div class="chip lives">❤️ <b id="lives">10</b></div>
-      <div class="chip wave">To'lqin <b id="wave">1</b>/8</div>
-    </div>
-
-    <div id="build-bar" class="hidden">
-      <button class="build-btn active" data-t="archer">🏹 Yoychi<span id="cost-archer">40</span></button>
-      <button class="build-btn" data-t="spear">🔱 Nayzachi<span id="cost-spear">25</span></button>
-    </div>
+    <a class="back-link" href="../../index.html">‹</a>
+    <canvas id="game"></canvas>
 
     <div id="start-screen" class="overlay">
       <h1>MINORA<span class="dot">.</span>MUDOFAASI</h1>
-      <p class="tag">8 to'lqin — yo'lga mudofaachi qo'ying</p>
-      <p class="hint">Bo'sh doiraga bosib tanlangan mudofaachini qo'ying. Yoychi — uzoqdan, Nayzachi — yaqindan kuchli.</p>
+      <p class="tag">10 to'lqin · 4 xil himoyachi · yangilash</p>
+      <p class="hint">Bo'sh maydonchani bosib himoyachi tanlang: <b>Yoychi</b> (uzoqdan), <b>Sehrgar</b> (muzlatadi, guruhga), <b>Bombachi</b> (katta portlash), <b>Ninja</b> (yaqindan juda tez). Himoyachini bosib <b>kuchaytiring</b> yoki soting. Dushman darvozaga yetmasin!</p>
       <button id="start-btn">Boshlash</button>
+      <button class="hidden"></button>
     </div>
 
     <div id="results-screen" class="overlay hidden">
-      <h2 id="result-title">Natija</h2>
-      <button id="retry-btn">Yana o'ynash</button>
+      <h2 id="winner-text">Tamom!</h2>
+      <p class="big-score" id="final-score"></p>
+      <div class="btn-row">
+        <button id="retry-btn">Yana o'ynash</button>
+        <a class="secondary-link" href="../../index.html">Menyu</a>
+      </div>
     </div>
   </div>
 
-  <script src="../../shared/common.js"></script>
+  <script src="../../shared/engine.js"></script>
+  <script src="../../shared/char.js"></script>
+  <script src="../../shared/scenery.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
