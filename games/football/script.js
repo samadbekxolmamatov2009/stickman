@@ -394,9 +394,9 @@
       label(ctx, `${score[0]}  :  ${score[1]}`, cx, 44, 28, '#ffffff');
       label(ctx, p2.name, cx + 90, 40, 15, '#8ac4ff');
       label(ctx, golden ? 'OLTIN GOL' : `⏱ ${Math.max(0, Math.ceil(timeLeft))}`, cx, 76, 15, timeLeft < 10 && !golden ? '#ff7a6b' : '#ffd34d');
-      bar(ctx, 132, 24, 110, 10, p1.energy / 100, '#ffd34d', '#ff9a3d');
+      bar(ctx, SG.hudX() + 20, 24, 110, 10, p1.energy / 100, '#ffd34d', '#ff9a3d');
       bar(ctx, W - 132, 22, 120, 10, p2.energy / 100, '#ffd34d', '#ff9a3d');
-      label(ctx, '⚡', 126, 35, 13, '#ffd34d', 'right', false);
+      label(ctx, '⚡', SG.hudX() + 14, 35, 13, '#ffd34d', 'right', false);
       if (bannerT > 0) label(ctx, banner, cx, H * 0.4, 66, '#ffd34d');
     }
   }

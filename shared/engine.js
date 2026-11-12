@@ -92,6 +92,8 @@ const SG = (() => {
   const anyPressed = (...codes) => codes.some(c => pressedKeys.has(c));
 
   // ---------- touch UI ----------
+  const uiK = () => clamp(window.innerHeight / 540, 0.6, 1);
+  const hudX = () => Math.round(104 / (view.scale || 1)) + 10;
   let uiRoot = null;
   function ensureUiRoot() {
     if (uiRoot) return uiRoot;
@@ -112,12 +114,15 @@ const SG = (() => {
     knob.className = 'sg-knob';
     el.appendChild(knob);
     root.appendChild(el);
+    const k0 = uiK();
+    el.style.transform = `scale(${k0})`;
+    el.style.transformOrigin = opts.right ? 'bottom right' : 'bottom left';
     const st = { x: 0, y: 0, active: false, el };
     let pid = null;
     const R = 46;
     function move(e) {
       const r = el.getBoundingClientRect();
-      let dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      let dx = (e.clientX - (r.left + r.width / 2)) / k0, dy = (e.clientY - (r.top + r.height / 2)) / k0;
       const d = Math.hypot(dx, dy) || 1;
       const k = Math.min(R, d);
       dx = dx / d * k; dy = dy / d * k;
@@ -138,11 +143,12 @@ const SG = (() => {
     const el = document.createElement('button');
     el.className = 'sg-btn';
     el.innerHTML = label;
-    const size = opts.size || 66;
+    const k = uiK();
+    const size = Math.round((opts.size || 66) * k);
     el.style.width = el.style.height = `${size}px`;
     el.style.fontSize = `${Math.round(size * 0.4)}px`;
-    if (opts.left !== undefined) el.style.left = `${opts.left}px`; else el.style.right = `${opts.right ?? 24}px`;
-    el.style.bottom = `${opts.bottom ?? 24}px`;
+    if (opts.left !== undefined) el.style.left = `${Math.round(opts.left * k)}px`; else el.style.right = `${Math.round((opts.right ?? 24) * k)}px`;
+    el.style.bottom = `${Math.round((opts.bottom ?? 24) * k)}px`;
     if (opts.color) { el.style.background = rgba(opts.color, 0.38); el.style.borderColor = rgba(opts.color, 0.9); }
     root.appendChild(el);
     const st = { down: false, _hit: false, el, hit() { const h = st._hit; st._hit = false; return h; } };
@@ -375,7 +381,7 @@ const SG = (() => {
     rand, randi, choice, clamp, lerp, damp, dist, hash, ease, mix, rgba, hexToRgb,
     isTouch, view, initView, toLocal, time, run,
     keys, key, pressed, anyKey, anyPressed,
-    makeStick, makeBtn, showTouch, clearTouch,
+    makeStick, makeBtn, showTouch, clearTouch, hudX,
     sfx, tone, noise, buzz, audioUnlock,
     FX, rr, label, bar, $, show, seg, best,
   };

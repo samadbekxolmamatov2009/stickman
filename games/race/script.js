@@ -367,7 +367,7 @@
 
   function drawHud(ctx) {
     // progress strip
-    const px = 120, pw = W - 240, py = 26;
+    const px = SG.hudX() + 8, pw = W - px - 60, py = 26;
     rr(ctx, px, py - 5, pw, 10, 5); ctx.fillStyle = 'rgba(8,10,18,0.55)'; ctx.fill();
     label(ctx, '🏁', px + pw + 16, py + 6, 16, '#fff', 'center', false);
     [...runners].sort((a, b) => a.human - b.human).forEach(r => {
@@ -380,7 +380,7 @@
     const hs = runners.filter(r => r.human).sort((a, b) => a.slot - b.slot);
     const order = [...runners].sort((a, b) => (a.done && b.done ? a.place - b.place : a.done ? -1 : b.done ? 1 : b.x - a.x));
     hs.forEach((r, k) => {
-      const zw = W / hs.length, bx = hs.length === 1 ? 120 : zw * k + 14, by = 50;
+      const zw = W / hs.length, bx = hs.length === 1 || k === 0 ? SG.hudX() + 8 : zw * k + 14, by = 50;
       const pos = order.indexOf(r) + 1;
       label(ctx, `${r.name}`, bx, by + 14, 14, r.color, 'left');
       label(ctx, `${pos}/${runners.length}`, bx + 34, by + 15, 18, pos === 1 ? '#ffd34d' : '#ffffff', 'left');

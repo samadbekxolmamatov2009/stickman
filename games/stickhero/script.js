@@ -203,7 +203,7 @@
       label(ctx, String(score), W / 2, 70, 56, '#ffffff');
       if (streak > 1) label(ctx, `MUKAMMAL x${streak}`, W / 2, 98, 15, '#ffd34d');
       label(ctx, `💎 ${gems}`, W - 20, 40, 20, '#7df9ff', 'right');
-      label(ctx, `Rekord: ${SG.best('sh_best2')}`, 116, 38, 14, '#cfd6e6', 'left');
+      label(ctx, `Rekord: ${SG.best('sh_best2')}`, SG.hudX() + 4, 38, 14, '#cfd6e6', 'left');
       if (state === 'idle' && score === 0) label(ctx, 'Bosib turing — ko\'prik o\'sadi', W / 2, 150, 18, '#ffffff');
       if (state === 'walk' && gem && !gem.got && score < 4 && heroX < gem.x - 20) label(ctx, 'Bosing — teskari o\'tib 💎 oling!', W / 2, 150, 16, '#7df9ff');
     }

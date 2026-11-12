@@ -380,10 +380,10 @@
     ctx.restore();
 
     if (state !== 'menu') {
-      rr(ctx, 110, 10, 330, 38, 19); ctx.fillStyle = 'rgba(8,10,18,0.62)'; ctx.fill();
-      label(ctx, `💰 ${gold}`, 128, 36, 17, '#ffd34d', 'left', false);
-      label(ctx, `❤ ${lives}`, 230, 36, 17, '#ff7a8a', 'left', false);
-      label(ctx, `To'lqin ${Math.min(Math.max(wave, 1), WAVES.length)}/${WAVES.length}`, 314, 35, 14, '#ffffff', 'left', false);
+      const hx = SG.hudX(); rr(ctx, hx, 10, 330, 38, 19); ctx.fillStyle = 'rgba(8,10,18,0.62)'; ctx.fill();
+      label(ctx, `💰 ${gold}`, hx + 18, 36, 17, '#ffd34d', 'left', false);
+      label(ctx, `❤ ${lives}`, hx + 120, 36, 17, '#ff7a8a', 'left', false);
+      label(ctx, `To'lqin ${Math.min(Math.max(wave, 1), WAVES.length)}/${WAVES.length}`, hx + 204, 35, 14, '#ffffff', 'left', false);
       UI.speed.x = W - 72; UI.speed.y = 12;
       rr(ctx, UI.speed.x, UI.speed.y, UI.speed.w, UI.speed.h, 17); ctx.fillStyle = speed === 2 ? '#37d6c4' : 'rgba(8,10,18,0.62)'; ctx.fill();
       label(ctx, speed === 2 ? '▶▶ x2' : '▶ x1', UI.speed.x + 29, UI.speed.y + 23, 14, speed === 2 ? '#06211d' : '#fff', 'center', false);

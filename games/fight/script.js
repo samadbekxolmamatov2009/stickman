@@ -467,8 +467,8 @@
   }
 
   function drawHud(ctx) {
-    const bw = Math.min(300, W * 0.3);
-    const lx = 112, rx = W - 18 - bw;
+    const bw = Math.min(300, W * 0.3 - 30);
+    const lx = SG.hudX(), rx = W - 18 - bw;
     bar(ctx, lx, 16, bw, 18, p1.hpShown / MAX_HP, '#ff5d5d', '#ffa35d');
     bar(ctx, lx, 39, bw * 0.6, 8, p1.energy / 100, '#c77dff', '#ffb347');
     label(ctx, 'P1', lx + 4, 62, 13, '#ff8a8a', 'left');

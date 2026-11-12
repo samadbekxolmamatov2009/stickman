@@ -362,9 +362,9 @@
     ctx.restore();
 
     if (state !== 'menu' && archers.length) {
-      const bw = Math.min(280, W * 0.28);
-      bar(ctx, 112, 16, bw, 18, archers[0].hpShown / MAX_HP, '#ff5d5d', '#ffa35d');
-      label(ctx, `P1  ${Math.ceil(archers[0].hp)}`, 116, 56, 13, '#ff8a8a', 'left');
+      const bw = Math.min(280, W * 0.26 - 20);
+      bar(ctx, SG.hudX(), 16, bw, 18, archers[0].hpShown / MAX_HP, '#ff5d5d', '#ffa35d');
+      label(ctx, `P1  ${Math.ceil(archers[0].hp)}`, SG.hudX() + 4, 56, 13, '#ff8a8a', 'left');
       ctx.save(); ctx.translate(W - 18, 0); ctx.scale(-1, 1);
       bar(ctx, 0, 16, bw, 18, archers[1].hpShown / MAX_HP, '#4da3ff', '#37d6c4');
       ctx.restore();
