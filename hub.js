@@ -15,7 +15,7 @@
     { id: 'volleyball', title: 'Stickman Voleybol', icon: '🏐', color: 'linear-gradient(135deg,#ffd34d,#e08a1f)', players: '1-2 o\'yinchi', desc: 'To\'r orqali o\'yin: ko\'tar, sakra, smesh ur.', ready: true },
     { id: 'duel', title: 'Qilich dueli', icon: '⚔️', color: 'linear-gradient(135deg,#ff7ac8,#b03a8a)', players: '1-2 o\'yinchi', desc: 'Signal chiqishi bilan bos — kim tez, o\'sha yutadi.', ready: true },
     { id: 'escape', title: 'Qamoqdan qochish', icon: '🔑', color: 'linear-gradient(135deg,#6f7aa5,#2f3657)', players: '1 o\'yinchi', desc: 'Qo\'riqchilardan yashirin, kalitni ol, chiqishga yet.', ready: true },
-    { id: 'moto', title: 'Moto tryuk', icon: '🏍️', color: 'linear-gradient(135deg,#8a94a8,#4a5266)', players: '1 o\'yinchi', desc: 'Tepaliklarda salto qil.' },
+    { id: 'moto', title: 'Moto tryuk', icon: '🏍️', color: 'linear-gradient(135deg,#ff5d5d,#8a2a4a)', players: '1 o\'yinchi', desc: 'Tepaliklarda haydab, havoda salto qil.', ready: true },
   ];
   const grid = document.getElementById('grid');
   GAMES.forEach(g => {
