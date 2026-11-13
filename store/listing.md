@@ -70,4 +70,4 @@ Play with a friend on one phone: Fight, Football, Volleyball, Archery, Sword Due
 - `icon-512.png` — ilova belgisi (512×512)
 - `feature-1024x500.png` — banner
 - `screenshots/` — 9 ta skrinshot (1920×1080)
-- `../privacy.html` — maxfiylik siyosati (ichidagi EMAIL_MANZILINGIZ ni o'z manzilingizga almashtiring)
+- `../privacy.html` — maxfiylik siyosati
