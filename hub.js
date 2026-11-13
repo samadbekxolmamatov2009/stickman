@@ -11,6 +11,11 @@
     { id: 'battleroyale', title: 'Battle Royale', icon: '💀', color: 'linear-gradient(135deg,#b06cff,#6a2fc2)', players: '1 o\'yinchi + 7 bot', desc: 'Qurol top, zonada qol, oxirgi omon qolgan yutadi.', ready: true },
     { id: 'rope', title: 'Arqonda uchish', icon: '🪢', color: 'linear-gradient(135deg,#7df9ff,#2a8fb0)', players: '1 o\'yinchi', desc: 'Arqon ot, tebran, to\'g\'ri paytda qo\'yib yubor.', ready: true },
     { id: 'tower', title: 'Parkur minorasi', icon: '🌋', color: 'linear-gradient(135deg,#ff9a3d,#c2301f)', players: '1 o\'yinchi', desc: 'Tepaga sakrab chiq — pastdan lava ko\'tariladi.', ready: true },
+    { id: 'zombie', title: 'Zombi himoyasi', icon: '🧟', color: 'linear-gradient(135deg,#7fbf5a,#2f6a35)', players: '1 o\'yinchi', desc: 'To\'lqinlardan omon qol, qobiliyat tanla, bossni yeng.', ready: true },
+    { id: 'volleyball', title: 'Stickman Voleybol', icon: '🏐', color: 'linear-gradient(135deg,#ffd34d,#e08a1f)', players: '1-2 o\'yinchi', desc: 'To\'r orqali o\'yin: ko\'tar, sakra, smesh ur.', ready: true },
+    { id: 'duel', title: 'Qilich dueli', icon: '⚔️', color: 'linear-gradient(135deg,#ff7ac8,#b03a8a)', players: '1-2 o\'yinchi', desc: 'Signal chiqishi bilan bos — kim tez, o\'sha yutadi.', ready: true },
+    { id: 'escape', title: 'Qamoqdan qochish', icon: '🔑', color: 'linear-gradient(135deg,#6f7aa5,#2f3657)', players: '1 o\'yinchi', desc: 'Qo\'riqchilardan yashirin, kalitni ol, chiqishga yet.', ready: true },
+    { id: 'moto', title: 'Moto tryuk', icon: '🏍️', color: 'linear-gradient(135deg,#8a94a8,#4a5266)', players: '1 o\'yinchi', desc: 'Tepaliklarda salto qil.' },
   ];
   const grid = document.getElementById('grid');
   GAMES.forEach(g => {
