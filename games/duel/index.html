@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070a14">
+<title>Qilichbozlik dueli — Stickman Games</title>
+<link rel="stylesheet" href="../../shared/common.css">
+</head>
+<body>
+  <div id="game-wrap">
+    <a class="back-link" href="../../index.html">‹</a>
+    <canvas id="game"></canvas>
+
+    <div id="start-screen" class="overlay">
+      <h1>QILICH<span class="dot">.</span>DUELI</h1>
+      <p class="tag">kim tezroq — o'sha yutadi</p>
+      <div class="picker-row">
+        <div class="picker">
+          <span class="picker-label">Raqib</span>
+          <div class="seg" id="mode-seg">
+            <button data-v="bot" class="active">Bot</button>
+            <button data-v="human">2 o'yinchi</button>
+          </div>
+        </div>
+        <div class="picker" id="diff-pick">
+          <span class="picker-label">Qiyinlik</span>
+          <div class="seg" id="diff-seg">
+            <button data-v="0">Oson</button>
+            <button data-v="1" class="active">O'rta</button>
+            <button data-v="2">Qiyin</button>
+          </div>
+        </div>
+      </div>
+      <p class="hint desktop-only"><b>⚔ UR!</b> belgisi chiqishi bilan bosing: P1 — <b>F</b>, P2 — <b>L</b>. Erta bossangiz — raund raqibga. Aldamchi belgilarga (🌸 🐦) aldanmang! 3 g'alabagacha.</p>
+      <p class="hint mobile-only"><b>⚔ UR!</b> belgisi chiqishi bilan ekranni bosing (2 kishi bo'lsa: chap yarmi — P1, o'ng yarmi — P2). Erta bossangiz — raund raqibga. Aldamchi belgilarga (🌸 🐦) aldanmang! 3 g'alabagacha.</p>
+      <button id="start-btn">Duelni boshlash</button>
+    </div>
+
+    <div id="results-screen" class="overlay hidden">
+      <h2 id="winner-text">G'olib!</h2>
+      <p class="big-score" id="final-score"></p>
+      <div class="btn-row">
+        <button id="retry-btn">Yana o'ynash</button>
+        <a class="secondary-link" href="../../index.html">Menyu</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/engine.js"></script>
+  <script src="../../shared/char.js"></script>
+  <script src="../../shared/scenery.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

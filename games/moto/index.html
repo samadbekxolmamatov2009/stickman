@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070a14">
+<title>Mototsikl tryuklari — Stickman Games</title>
+<link rel="stylesheet" href="../../shared/common.css">
+</head>
+<body>
+  <div id="game-wrap">
+    <a class="back-link" href="../../index.html">‹</a>
+    <canvas id="game"></canvas>
+
+    <div id="start-screen" class="overlay">
+      <h1>MOTO<span class="dot">.</span>TRYUK</h1>
+      <p class="tag">salto · yoqilg'i · tepaliklar</p>
+      <p class="hint"><b>GAZ</b> (o'ng tugma / <b>→</b> / <b>D</b>) va <b>TORMOZ</b> (chap tugma / <b>←</b> / <b>A</b>). Havoda gaz — orqaga, tormoz — oldinga aylantiradi: <b>salto</b> qilib ball oling, lekin g'ildirakda qo'ning! ⛽ yoqilg'i tugamasin.</p>
+      <button id="start-btn">Haydash</button>
+      <p class="best-line">Eng yaxshi natija: <b id="best">0</b></p><button class="hidden"></button>
+    </div>
+
+    <div id="results-screen" class="overlay hidden">
+      <h2 id="winner-text">Tamom!</h2>
+      <p class="big-score" id="final-score"></p>
+      <div class="btn-row">
+        <button id="retry-btn">Yana o'ynash</button>
+        <a class="secondary-link" href="../../index.html">Menyu</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/engine.js"></script>
+  <script src="../../shared/char.js"></script>
+  <script src="../../shared/scenery.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

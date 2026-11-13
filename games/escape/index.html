@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070a14">
+<title>Qamoqdan qochish — Stickman Games</title>
+<link rel="stylesheet" href="../../shared/common.css">
+</head>
+<body>
+  <div id="game-wrap">
+    <a class="back-link" href="../../index.html">‹</a>
+    <canvas id="game"></canvas>
+
+    <div id="start-screen" class="overlay">
+      <h1>QAMOQDAN<span class="dot">.</span>QOCHISH</h1>
+      <p class="tag">yashirin · kalit · chiqish</p>
+      <p class="hint">Qo'riqchilar va kameralarning <b>ko'rish maydoniga</b> tushmang (devor ortida ko'rishmaydi). 🔑 kalitni oling — eshik ochiladi, keyin yashil chiqishga yeting. Tangalar — yulduz uchun. Boshqaruv: joystik yoki <b>WASD</b>.</p>
+      <button id="start-btn">Qochishni boshlash</button>
+      <p class="best-line">Eng yaxshi natija: <b id="best">0</b></p><button class="hidden"></button>
+    </div>
+
+    <div id="results-screen" class="overlay hidden">
+      <h2 id="winner-text">Tamom!</h2>
+      <p class="big-score" id="final-score"></p>
+      <div class="btn-row">
+        <button id="retry-btn">Yana o'ynash</button>
+        <a class="secondary-link" href="../../index.html">Menyu</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/engine.js"></script>
+  <script src="../../shared/char.js"></script>
+  <script src="../../shared/scenery.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
