@@ -1,4 +1,4 @@
-package uz.samadbekxolmamatov.stickmanrace;
+package uz.samadbekxolmamatov.stickmangames;
 
 import android.os.Bundle;
 import android.view.WindowManager;

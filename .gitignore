@@ -7,3 +7,6 @@ android/captures/
 *.apk
 *.aab
 www/
+android/keystore.properties
+*.jks
+*.keystore
