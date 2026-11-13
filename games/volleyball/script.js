@@ -59,29 +59,39 @@
     score = [0, 0]; state = 'play'; serve(0);
     banner = 'BOSHLADIK!'; bannerT = 1.1;
     SG.show('start-screen', false); SG.show('results-screen', false);
-    SG.clearTouch();
+    SG.clearTouch(); pads = [null, null];
     if (SG.isTouch) {
-      touch = { stick: SG.makeStick(), hit: SG.makeBtn('🏐', { right: 24, bottom: 24, size: 90, color: '#ff5d5d' }), jump: SG.makeBtn('⤊', { right: 126, bottom: 24, size: 72, color: '#37d6c4' }) };
+      if (mode === 'human') {
+        const mk = side => {
+          const o = (x, b, size, color) => Object.assign({ bottom: b, size, color }, side === 0 ? { left: x } : { right: x });
+          return { stick: SG.makeStick({ right: side === 1, scale: 0.82 }), hit: SG.makeBtn('🏐', o(150, 14, 72, side === 0 ? '#ff5d5d' : '#4da3ff')), jump: SG.makeBtn('⤊', o(230, 14, 60, '#37d6c4')) };
+        };
+        pads[0] = mk(0); pads[1] = mk(1);
+      } else {
+        pads[0] = { stick: SG.makeStick(), hit: SG.makeBtn('🏐', { right: 24, bottom: 24, size: 90, color: '#ff5d5d' }), jump: SG.makeBtn('⤊', { right: 126, bottom: 24, size: 72, color: '#37d6c4' }) };
+      }
       SG.showTouch(true);
     }
   }
 
-  let latch = false;
+  let pads = [null, null];
+  const latch = [false, false];
   function humanInput(i) {
     const inp = blank();
     if (i === 0) {
       inp.mx = (SG.key('KeyD') ? 1 : 0) - (SG.key('KeyA') ? 1 : 0);
       inp.jump = SG.pressed('KeyW') || SG.pressed('Space'); inp.hit = SG.pressed('KeyF');
-      if (touch) {
-        const s = touch.stick;
-        if (Math.abs(s.x) > 0.25) inp.mx = Math.sign(s.x);
-        const up = s.y < -0.6; if (up && !latch) inp.jump = true; latch = up;
-        if (touch.jump.hit()) inp.jump = true;
-        if (touch.hit.hit()) inp.hit = true;
-      }
     } else {
       inp.mx = (SG.key('ArrowRight') ? 1 : 0) - (SG.key('ArrowLeft') ? 1 : 0);
       inp.jump = SG.pressed('ArrowUp'); inp.hit = SG.pressed('KeyK');
+    }
+    const pad = pads[i];
+    if (pad) {
+      const st = pad.stick;
+      if (Math.abs(st.x) > 0.25) inp.mx = Math.sign(st.x);
+      const up = st.y < -0.6; if (up && !latch[i]) inp.jump = true; latch[i] = up;
+      if (pad.jump.hit()) inp.jump = true;
+      if (pad.hit.hit()) inp.hit = true;
     }
     return inp;
   }

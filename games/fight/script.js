@@ -251,21 +251,38 @@
     newRound();
   }
 
+  let pads = [null, null];
   function buildTouch() {
-    SG.clearTouch();
+    SG.clearTouch(); pads = [null, null]; touch = null;
     if (!SG.isTouch) return;
-    touch = {
-      stick: SG.makeStick(),
-      punch: SG.makeBtn('👊', { right: 22, bottom: 22, size: 80, color: '#ff5d5d' }),
-      kick: SG.makeBtn('🦵', { right: 114, bottom: 18, size: 64, color: '#ffb84d' }),
-      jump: SG.makeBtn('⤊', { right: 30, bottom: 114, size: 62, color: '#37d6c4' }),
-      special: SG.makeBtn('🔥', { right: 108, bottom: 94, size: 58, color: '#c77dff' }),
-      dash: SG.makeBtn('💨', { right: 190, bottom: 24, size: 54, color: '#4da3ff' }),
-    };
+    if (mode === 'human') {
+      // two players share the screen: P1 on the left half, P2 on the right half
+      const mk = side => {
+        const o = (x, b, size, color) => Object.assign({ bottom: b, size, color }, side === 0 ? { left: x } : { right: x });
+        return {
+          stick: SG.makeStick({ right: side === 1, scale: 0.82 }),
+          punch: SG.makeBtn('👊', o(150, 14, 68, side === 0 ? '#ff5d5d' : '#4da3ff')),
+          kick: SG.makeBtn('🦵', o(226, 14, 58, '#ffb84d')),
+          special: SG.makeBtn('🔥', o(158, 90, 50, '#c77dff')),
+          dash: SG.makeBtn('💨', o(218, 80, 46, '#37d6c4')),
+        };
+      };
+      pads[0] = mk(0); pads[1] = mk(1);
+    } else {
+      pads[0] = {
+        stick: SG.makeStick(),
+        punch: SG.makeBtn('👊', { right: 22, bottom: 22, size: 80, color: '#ff5d5d' }),
+        kick: SG.makeBtn('🦵', { right: 114, bottom: 18, size: 64, color: '#ffb84d' }),
+        jump: SG.makeBtn('⤊', { right: 30, bottom: 114, size: 62, color: '#37d6c4' }),
+        special: SG.makeBtn('🔥', { right: 108, bottom: 94, size: 58, color: '#c77dff' }),
+        dash: SG.makeBtn('💨', { right: 190, bottom: 24, size: 54, color: '#4da3ff' }),
+      };
+    }
+    touch = pads[0];
     SG.showTouch(true);
   }
 
-  let stickJumpLatch = false;
+  const jumpLatch = [false, false];
   function humanInput(i) {
     const inp = blankInput();
     if (i === 0) {
@@ -273,24 +290,25 @@
       inp.jump = SG.pressed('KeyW'); inp.block = SG.key('KeyS');
       inp.punch = SG.pressed('KeyF'); inp.kick = SG.pressed('KeyG');
       inp.special = SG.pressed('KeyH'); inp.dash = SG.pressed('KeyQ');
-      if (touch) {
-        const s = touch.stick;
-        if (Math.abs(s.x) > 0.25) inp.mx = Math.sign(s.x);
-        const up = s.y < -0.6;
-        if (up && !stickJumpLatch) inp.jump = true;
-        stickJumpLatch = up;
-        if (s.y > 0.6) inp.block = true;
-        if (touch.jump.hit()) inp.jump = true;
-        if (touch.punch.hit()) inp.punch = true;
-        if (touch.kick.hit()) inp.kick = true;
-        if (touch.special.hit()) inp.special = true;
-        if (touch.dash.hit()) inp.dash = true;
-      }
     } else {
       inp.mx = (SG.key('ArrowRight') ? 1 : 0) - (SG.key('ArrowLeft') ? 1 : 0);
       inp.jump = SG.pressed('ArrowUp'); inp.block = SG.key('ArrowDown');
       inp.punch = SG.pressed('KeyK'); inp.kick = SG.pressed('KeyL');
       inp.special = SG.pressed('Semicolon'); inp.dash = SG.pressed('KeyO');
+    }
+    const pad = pads[i];
+    if (pad) {
+      const st = pad.stick;
+      if (Math.abs(st.x) > 0.25) inp.mx = Math.sign(st.x);
+      const up = st.y < -0.6;
+      if (up && !jumpLatch[i]) inp.jump = true;
+      jumpLatch[i] = up;
+      if (st.y > 0.6) inp.block = true;
+      if (pad.jump && pad.jump.hit()) inp.jump = true;
+      if (pad.punch.hit()) inp.punch = true;
+      if (pad.kick.hit()) inp.kick = true;
+      if (pad.special.hit()) inp.special = true;
+      if (pad.dash && pad.dash.hit()) inp.dash = true;
     }
     return inp;
   }

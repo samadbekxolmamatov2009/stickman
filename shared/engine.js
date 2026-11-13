@@ -114,7 +114,7 @@ const SG = (() => {
     knob.className = 'sg-knob';
     el.appendChild(knob);
     root.appendChild(el);
-    const k0 = uiK();
+    const k0 = uiK() * (opts.scale || 1);
     el.style.transform = `scale(${k0})`;
     el.style.transformOrigin = opts.right ? 'bottom right' : 'bottom left';
     const st = { x: 0, y: 0, active: false, el };
